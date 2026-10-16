@@ -23,53 +23,57 @@ export default function Departments() {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Departments</h1>
-          <p className="text-sm text-gray-500">UIIT is the sole academic department in this prototype</p>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Academic Departments</h1>
+          <p className="text-xs text-gray-500 font-medium mt-1">UIIT is the primary academic department entity in this prototype.</p>
         </div>
         {!canManage && (
-          <span className="flex items-center gap-1.5 text-xs text-gray-400">
-            <Lock size={12} /> View only — admin can manage
+          <span className="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+            <Lock size={13} /> View only — admin can manage
           </span>
         )}
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-100">
-              <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">ID</th>
-              <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Name</th>
-              <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Code</th>
-              <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">HOD</th>
-              <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Contact</th>
+            <tr className="bg-gray-50/70 border-b border-gray-100">
+              <th className="text-left px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Dept ID</th>
+              <th className="text-left px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Department Name</th>
+              <th className="text-left px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Code</th>
+              <th className="text-left px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Head of Department</th>
+              <th className="text-left px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Official Contact</th>
               {canManage && (
-                <th className="text-right px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                <th className="text-right px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Actions</th>
               )}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-gray-100">
             {items.map((d) => (
-              <tr key={d.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="px-5 py-3 text-sm text-gray-600">{d.id}</td>
-                <td className="px-5 py-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Building2 size={16} className="text-blue-600" />
+              <tr key={d.id} className="hover:bg-gray-50/60 transition-colors">
+                <td className="px-6 py-4 text-xs font-mono font-bold text-gray-400">#{d.id}</td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 bg-blue-50 text-blue-600 border border-blue-200/60 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+                      <Building2 size={15} />
                     </div>
-                    <span className="text-sm font-medium text-gray-800">{d.name}</span>
+                    <span className="text-xs font-bold text-gray-900">{d.name}</span>
                   </div>
                 </td>
-                <td className="px-5 py-3 text-sm text-gray-600">{d.code}</td>
-                <td className="px-5 py-3 text-sm text-gray-600">{d.hod_name}</td>
-                <td className="px-5 py-3 text-sm text-gray-600">{d.contact}</td>
+                <td className="px-6 py-4 text-xs font-semibold text-gray-700">{d.code}</td>
+                <td className="px-6 py-4 text-xs font-semibold text-gray-800">{d.hod_name}</td>
+                <td className="px-6 py-4 text-xs font-mono text-gray-500 font-medium">{d.contact}</td>
                 {canManage && (
-                  <td className="px-5 py-3 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit(d)} className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors">
-                        <Edit size={14} className="text-gray-500" />
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex items-center justify-end gap-1.5">
+                      <button
+                        onClick={() => openEdit(d)}
+                        className="p-1.5 hover:bg-gray-100 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+                        title="Edit Department"
+                      >
+                        <Edit size={14} />
                       </button>
                     </div>
                   </td>
@@ -85,16 +89,22 @@ export default function Departments() {
         onClose={() => setModal(null)}
         title="Edit UIIT Department"
       >
-        <div className="space-y-3">
-          <FormField label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-          <FormField label="Code" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} />
-          <FormField label="HOD Name" value={form.hod_name} onChange={(e) => setForm({ ...form, hod_name: e.target.value })} />
-          <FormField label="Contact" value={form.contact} onChange={(e) => setForm({ ...form, contact: e.target.value })} />
-          <div className="flex gap-2 pt-2">
-            <button onClick={handleSave} className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-              Save
+        <div className="space-y-4">
+          <FormField label="Department Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          <FormField label="Code (e.g. UIIT)" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} />
+          <FormField label="Head of Department (HOD)" value={form.hod_name} onChange={(e) => setForm({ ...form, hod_name: e.target.value })} />
+          <FormField label="Official Contact Phone" value={form.contact} onChange={(e) => setForm({ ...form, contact: e.target.value })} />
+          <div className="flex gap-2.5 pt-3">
+            <button
+              onClick={handleSave}
+              className="flex-1 bg-black hover:bg-neutral-800 text-white py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer"
+            >
+              Save Department
             </button>
-            <button onClick={() => setModal(null)} className="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+            <button
+              onClick={() => setModal(null)}
+              className="flex-1 border border-gray-200 hover:bg-gray-50 text-gray-700 py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer"
+            >
               Cancel
             </button>
           </div>

@@ -54,68 +54,90 @@ export default function Sections() {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Sections</h1>
-          <p className="text-sm text-gray-500">{canManage ? "Create section-course assignments and assign each course to a teacher." : "Your section assignments by session, course, and class"}</p>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Sections & Classes</h1>
+          <p className="text-xs text-gray-500 font-medium mt-1">
+            {canManage
+              ? "Allocate sections to academic courses and assign faculty instructors."
+              : "Your section allocations by session, course, and class."}
+          </p>
         </div>
         {canManage ? (
           <button
             onClick={openAdd}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 bg-black hover:bg-neutral-800 text-white px-5 py-2.5 rounded-full text-xs font-semibold shadow-xs transition-all cursor-pointer"
           >
-            <Plus size={16} />
-            Add Section
+            <Plus size={15} />
+            <span>Add Section</span>
           </button>
         ) : (
-          <span className="flex items-center gap-1.5 text-xs text-gray-400">
-            <Lock size={12} /> View only — admin can manage
+          <span className="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+            <Lock size={13} /> View only — admin can manage
           </span>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {visibleItems.map((s) => (
-          <div key={s.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                  <Users size={20} className="text-amber-600" />
+          <div
+            key={s.id}
+            className="bg-white rounded-3xl border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-6 hover:shadow-md transition-all flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-amber-50 text-amber-600 border border-amber-200/60 rounded-2xl flex items-center justify-center font-bold shadow-2xs">
+                    <Users size={18} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-gray-900 leading-tight">
+                      {s.class_name} — {getCourseName(s.course_id)}
+                    </h3>
+                    <p className="text-[11px] text-gray-400 font-medium mt-0.5">{getSemesterName(s.semester_id)}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-800">{s.class_name} — {getCourseName(s.course_id)}</h3>
-                  <p className="text-xs text-gray-500">{getSemesterName(s.semester_id)}</p>
+                <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
+                  s.status === "active" ? "bg-emerald-50 text-emerald-700 border-emerald-200/60" : "bg-gray-100 text-gray-500 border-gray-200"
+                }`}>
+                  {s.status}
+                </span>
+              </div>
+
+              <div className="mt-5 grid grid-cols-2 gap-3 text-xs">
+                <div className="bg-gray-50/80 rounded-2xl p-3 border border-gray-150">
+                  <p className="text-[10px] text-gray-400 uppercase font-semibold">Faculty Instructor</p>
+                  <p className="text-gray-900 font-bold mt-0.5">{getInstructorName(s.instructor_id)}</p>
+                </div>
+                <div className="bg-gray-50/80 rounded-2xl p-3 border border-gray-150">
+                  <p className="text-[10px] text-gray-400 uppercase font-semibold">Class Shift</p>
+                  <p className="text-gray-900 font-bold mt-0.5">{s.shift}</p>
                 </div>
               </div>
-              <span className={`text-xs px-2 py-0.5 rounded-full ${s.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
-                {s.status}
-              </span>
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
-              <div className="bg-gray-50 rounded-lg p-2.5">
-                <p className="text-gray-400">Instructor</p>
-                <p className="text-gray-700 font-medium">{getInstructorName(s.instructor_id)}</p>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-2.5">
-                <p className="text-gray-400">Shift</p>
-                <p className="text-gray-700 font-medium">{s.shift}</p>
-              </div>
-            </div>
+
             {canManage && (
-              <div className="mt-3 flex gap-2">
-                <button onClick={() => openEdit(s)} className="flex-1 flex items-center justify-center gap-1 py-1.5 text-xs text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
-                  <Edit size={12} /> Edit
+              <div className="mt-4 pt-3 border-t border-gray-100 flex gap-2">
+                <button
+                  onClick={() => openEdit(s)}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-full transition-colors cursor-pointer"
+                >
+                  <Edit size={12} /> <span>Edit Allocation</span>
                 </button>
-                <button onClick={() => handleDelete(s.id)} className="flex-1 flex items-center justify-center gap-1 py-1.5 text-xs text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                  <Trash2 size={12} /> Delete
+                <button
+                  onClick={() => handleDelete(s.id)}
+                  className="p-2 hover:bg-red-50 text-gray-400 hover:text-red-600 rounded-full transition-colors cursor-pointer"
+                  title="Delete Section"
+                >
+                  <Trash2 size={14} />
                 </button>
               </div>
             )}
           </div>
         ))}
         {visibleItems.length === 0 && (
-          <div className="md:col-span-2 bg-white border border-gray-100 rounded-xl p-8 text-center text-sm text-gray-500">
+          <div className="md:col-span-2 bg-white border border-gray-200/80 rounded-3xl p-12 text-center text-xs font-semibold text-gray-400">
             No sections are assigned to {user?.name}.
           </div>
         )}
@@ -124,11 +146,11 @@ export default function Sections() {
       <Modal
         open={!!modal}
         onClose={() => setModal(null)}
-        title={modal?.mode === "add" ? "Add Section Course Assignment" : "Edit Section Course Assignment"}
+        title={modal?.mode === "add" ? "Add Section Allocation" : "Edit Section Allocation"}
       >
-        <div className="space-y-3">
+        <div className="space-y-4">
           <SelectField
-            label="Course"
+            label="Academic Course"
             value={form.course_id}
             onChange={(e) => setForm({ ...form, course_id: Number(e.target.value) })}
           >
@@ -138,7 +160,7 @@ export default function Sections() {
             ))}
           </SelectField>
           <SelectField
-            label="Session"
+            label="Academic Session"
             value={form.semester_id}
             onChange={(e) => {
               const semester_id = Number(e.target.value);
@@ -151,7 +173,7 @@ export default function Sections() {
             ))}
           </SelectField>
           <SelectField
-            label="Instructor"
+            label="Assigned Instructor"
             value={form.instructor_id}
             onChange={(e) => setForm({ ...form, instructor_id: Number(e.target.value) })}
           >
@@ -161,7 +183,7 @@ export default function Sections() {
           </SelectField>
           <FormField label="Class Name (e.g. BSCS-4A)" value={form.class_name} onChange={(e) => setForm({ ...form, class_name: e.target.value })} />
           <SelectField
-            label="Shift"
+            label="Class Shift"
             value={form.shift}
             onChange={(e) => setForm({ ...form, shift: e.target.value })}
           >
@@ -169,18 +191,25 @@ export default function Sections() {
             <option>Evening</option>
           </SelectField>
           <SelectField
-            label="Status"
+            label="Allocation Status"
             value={form.status}
             onChange={(e) => setForm({ ...form, status: e.target.value })}
           >
             <option>active</option>
             <option>archived</option>
           </SelectField>
-          <div className="flex gap-2 pt-2">
-            <button disabled={!form.course_id} onClick={handleSave} className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 transition-colors">
-              Save
+          <div className="flex gap-2.5 pt-3">
+            <button
+              disabled={!form.course_id}
+              onClick={handleSave}
+              className="flex-1 bg-black hover:bg-neutral-800 text-white py-2.5 rounded-full text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-40 transition-all cursor-pointer"
+            >
+              Save Allocation
             </button>
-            <button onClick={() => setModal(null)} className="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+            <button
+              onClick={() => setModal(null)}
+              className="flex-1 border border-gray-200 hover:bg-gray-50 text-gray-700 py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer"
+            >
               Cancel
             </button>
           </div>

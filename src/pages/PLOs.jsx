@@ -45,63 +45,77 @@ export default function PLOs() {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Program Learning Outcomes</h1>
-          <p className="text-sm text-gray-500">Define PLOs mapped to accreditation standards</p>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Program Learning Outcomes</h1>
+          <p className="text-xs text-gray-500 font-medium mt-1">Define institutional PLOs mapped to international accreditation bodies (ABET/HEC).</p>
         </div>
         {canManage ? (
           <button
             onClick={openAdd}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 bg-black hover:bg-neutral-800 text-white px-5 py-2.5 rounded-full text-xs font-semibold shadow-xs transition-all cursor-pointer"
           >
-            <Plus size={16} />
-            Add PLO
+            <Plus size={15} />
+            <span>Add PLO</span>
           </button>
         ) : (
-          <span className="flex items-center gap-1.5 text-xs text-gray-400">
-            <Lock size={12} /> View only — admin can manage
+          <span className="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+            <Lock size={13} /> View only — admin can manage
           </span>
         )}
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-100">
-              <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Number</th>
-              <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Title</th>
-              <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Program</th>
-              <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Bloom Domain</th>
-              <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Accreditation Ref</th>
+            <tr className="bg-gray-50/70 border-b border-gray-100">
+              <th className="text-left px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Identifier</th>
+              <th className="text-left px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Statement / Title</th>
+              <th className="text-left px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Degree Program</th>
+              <th className="text-left px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Bloom Domain</th>
+              <th className="text-left px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Accreditation Ref</th>
               {canManage && (
-                <th className="text-right px-5 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                <th className="text-right px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Actions</th>
               )}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-gray-100">
             {items.map((p) => (
-              <tr key={p.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="px-5 py-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                      <Target size={16} className="text-red-600" />
+              <tr key={p.id} className="hover:bg-gray-50/60 transition-colors">
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 bg-red-50 text-red-600 border border-red-200/60 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+                      <Target size={15} />
                     </div>
-                    <span className="text-sm font-semibold text-gray-800">{p.number}</span>
+                    <span className="text-xs font-mono font-bold text-gray-900">{p.number}</span>
                   </div>
                 </td>
-                <td className="px-5 py-3 text-sm text-gray-700">{p.title}</td>
-                <td className="px-5 py-3 text-sm text-gray-600">{getProgName(p.program_id)}</td>
-                <td className="px-5 py-3">
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">{p.bloom_domain}</span>
+                <td className="px-6 py-4 text-xs font-semibold text-gray-800">{p.title}</td>
+                <td className="px-6 py-4 text-xs text-gray-600 font-medium">{getProgName(p.program_id)}</td>
+                <td className="px-6 py-4 text-xs">
+                  <span className="bg-purple-50 text-purple-700 border border-purple-200/60 px-2.5 py-0.5 rounded-full font-semibold">
+                    {p.bloom_domain}
+                  </span>
                 </td>
-                <td className="px-5 py-3 text-sm text-gray-600 font-mono">{p.accreditation_ref}</td>
+                <td className="px-6 py-4 text-xs font-mono text-gray-500 font-medium">{p.accreditation_ref}</td>
                 {canManage && (
-                  <td className="px-5 py-3 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit(p)} className="p-1.5 hover:bg-gray-100 rounded-lg"><Edit size={14} className="text-gray-500" /></button>
-                      <button onClick={() => handleDelete(p.id)} className="p-1.5 hover:bg-red-50 rounded-lg"><Trash2 size={14} className="text-red-500" /></button>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex items-center justify-end gap-1.5">
+                      <button
+                        onClick={() => openEdit(p)}
+                        className="p-1.5 hover:bg-gray-100 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+                        title="Edit"
+                      >
+                        <Edit size={14} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(p.id)}
+                        className="p-1.5 hover:bg-red-50 text-gray-400 hover:text-red-600 rounded-lg transition-colors"
+                        title="Delete"
+                      >
+                        <Trash2 size={14} />
+                      </button>
                     </div>
                   </td>
                 )}
@@ -116,11 +130,19 @@ export default function PLOs() {
         onClose={() => setModal(null)}
         title={modal?.mode === "add" ? "Add PLO" : "Edit PLO"}
       >
-        <div className="space-y-3">
-          <FormField label="Number (e.g. PLO-9)" value={form.number} onChange={(e) => setForm({ ...form, number: e.target.value })} />
-          <FormField label="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+        <div className="space-y-4">
+          <FormField
+            label="PLO Number (e.g. PLO-9)"
+            value={form.number}
+            onChange={(e) => setForm({ ...form, number: e.target.value })}
+          />
+          <FormField
+            label="Title / Description"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+          />
           <SelectField
-            label="Program"
+            label="Degree Program"
             value={form.program_id}
             onChange={(e) => setForm({ ...form, program_id: Number(e.target.value) })}
           >
@@ -137,12 +159,22 @@ export default function PLOs() {
               <option key={b}>{b}</option>
             ))}
           </SelectField>
-          <FormField label="Accreditation Ref (e.g. ABET CAC-9)" value={form.accreditation_ref} onChange={(e) => setForm({ ...form, accreditation_ref: e.target.value })} />
-          <div className="flex gap-2 pt-2">
-            <button onClick={handleSave} className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-              Save
+          <FormField
+            label="Accreditation Reference (e.g. ABET CAC-9)"
+            value={form.accreditation_ref}
+            onChange={(e) => setForm({ ...form, accreditation_ref: e.target.value })}
+          />
+          <div className="flex gap-2.5 pt-3">
+            <button
+              onClick={handleSave}
+              className="flex-1 bg-black hover:bg-neutral-800 text-white py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer"
+            >
+              Save PLO
             </button>
-            <button onClick={() => setModal(null)} className="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+            <button
+              onClick={() => setModal(null)}
+              className="flex-1 border border-gray-200 hover:bg-gray-50 text-gray-700 py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer"
+            >
               Cancel
             </button>
           </div>

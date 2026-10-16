@@ -9,20 +9,20 @@ const sampleKinds = ["Best", "Average", "Worst"];
 const standaloneDocs = ["Course Outline", "Lab Manuals"];
 
 const categoryDescriptions = {
-  "Assignment - Best": "Best student submissions of assignment blueprints",
-  "Assignment - Average": "Average student submissions of assignment blueprints",
-  "Assignment - Worst": "Weakest submissions of assignment blueprints",
-  "Quiz - Best": "Best student submissions of quiz blueprints",
-  "Quiz - Average": "Average student submissions of quiz blueprints",
-  "Quiz - Worst": "Weakest submissions of quiz blueprints",
-  "Mid Exam - Best": "Best answer sheets of mid exam blueprints",
-  "Mid Exam - Average": "Average answer sheets of mid exam blueprints",
-  "Mid Exam - Worst": "Weakest answer sheets of mid exam blueprints",
-  "Final Exam - Best": "Best answer sheets of final exam blueprints",
-  "Final Exam - Average": "Average answer sheets of final exam blueprints",
-  "Final Exam - Worst": "Weakest answer sheets of final exam blueprints",
-  "Course Outline": "Approved course outline document",
-  "Lab Manuals": "Lab manuals / practical workbooks",
+  "Assignment - Best": "Exemplary student submissions for assignment rubrics",
+  "Assignment - Average": "Median representative student assignment submissions",
+  "Assignment - Worst": "Remediation candidate student assignment submissions",
+  "Quiz - Best": "Top score answer sheets for quiz evaluations",
+  "Quiz - Average": "Median representative answer sheets for quizzes",
+  "Quiz - Worst": "Low score answer sheets for quiz evaluations",
+  "Mid Exam - Best": "Exemplary student mid exam answer booklets",
+  "Mid Exam - Average": "Median representative mid exam answer booklets",
+  "Mid Exam - Worst": "Remediation candidate mid exam answer booklets",
+  "Final Exam - Best": "Exemplary student final exam answer scripts",
+  "Final Exam - Average": "Median representative final exam answer scripts",
+  "Final Exam - Worst": "Remediation candidate final exam answer scripts",
+  "Course Outline": "HEC / NCEAC approved course syllabus document",
+  "Lab Manuals": "Practical workbooks & laboratory session rubrics",
 };
 
 const formatBytes = (bytes) => {
@@ -78,12 +78,12 @@ export default function Documents() {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Document Upload</h1>
-          <p className="text-sm text-gray-500">
-            Upload blueprint samples (Best / Average / Worst), course outlines and lab manuals
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Evidence & Documents</h1>
+          <p className="text-xs text-gray-500 font-medium mt-1">
+            Store accreditation artifacts (Best, Average, Worst student work, course outlines and lab manuals).
           </p>
         </div>
       </div>
@@ -91,74 +91,88 @@ export default function Documents() {
       <WorkflowSelector wf={wf} />
 
       {uploadedMsg && (
-        <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 px-4 py-2.5 rounded-lg mb-4 text-sm">
-          <UploadCloud size={16} />
-          Document record saved to local storage (demo — actual uploads are simulated).
+        <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-2xl text-xs font-semibold animate-in fade-in">
+          <UploadCloud size={16} className="text-emerald-600" />
+          <span>Document record recorded in local archive.</span>
         </div>
       )}
 
       {!wf.section ? (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-10 text-center">
-          <UploadCloud size={32} className="text-gray-300 mx-auto mb-3" />
-          <p className="text-sm text-gray-500">Select a course and section to upload documents.</p>
+        <div className="bg-white rounded-3xl border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-12 text-center">
+          <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-3 text-gray-400 border border-gray-150">
+            <UploadCloud size={22} />
+          </div>
+          <p className="text-xs font-semibold text-gray-500">Select an academic course and section above to upload evidence.</p>
         </div>
       ) : (
         <>
-          <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 text-blue-700 px-4 py-2.5 rounded-lg mb-5 text-sm">
-            <Info size={16} />
-            Prototype mode: only file metadata (name, size, date) is stored — no files are actually uploaded.
+          <div className="flex items-center gap-2.5 bg-blue-50/70 border border-blue-200/60 text-blue-900 px-4 py-3 rounded-2xl text-xs font-semibold">
+            <Info size={16} className="text-blue-600 shrink-0" />
+            <span>Prototype storage mode: file metadata (name, size, timestamp) is archived in browser cache.</span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
             {categories.map((category) => {
               const docs = sectionDocs(category);
               return (
-                <div key={category} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-9 h-9 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <FileText size={16} className="text-blue-600" />
+                <div
+                  key={category}
+                  className="bg-white rounded-3xl border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-5 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="w-9 h-9 bg-purple-50 text-purple-600 border border-purple-200/60 rounded-xl flex items-center justify-center shrink-0 shadow-2xs">
+                        <FileText size={16} />
                       </div>
                       <div>
-                        <h3 className="text-sm font-semibold text-gray-800">{category}</h3>
-                        <p className="text-[11px] text-gray-400">{categoryDescriptions[category]}</p>
+                        <h3 className="text-xs font-bold text-gray-900">{category}</h3>
+                        <p className="text-[11px] text-gray-400 mt-0.5 leading-tight font-medium">
+                          {categoryDescriptions[category]}
+                        </p>
                       </div>
                     </div>
+
+                    <label className="mt-3 flex items-center justify-center gap-2 border border-dashed border-gray-300 hover:border-black rounded-2xl py-2.5 text-xs font-semibold text-gray-700 hover:text-black cursor-pointer bg-gray-50/50 hover:bg-gray-100/50 transition-all">
+                      <UploadCloud size={14} />
+                      <span>Upload Sample</span>
+                      <input
+                        type="file"
+                        multiple
+                        className="hidden"
+                        ref={(el) => {
+                          fileRefs.current[category] = el;
+                        }}
+                        onChange={(e) => handleUpload(category, e.target.files)}
+                      />
+                    </label>
                   </div>
 
-                  <label className="mt-3 flex items-center justify-center gap-2 border-2 border-dashed border-gray-200 rounded-lg py-2.5 text-sm text-gray-600 hover:border-blue-300 hover:text-blue-600 cursor-pointer transition-colors">
-                    <UploadCloud size={15} />
-                    Upload
-                    <input
-                      type="file"
-                      multiple
-                      className="hidden"
-                      ref={(el) => {
-                        fileRefs.current[category] = el;
-                      }}
-                      onChange={(e) => handleUpload(category, e.target.files)}
-                    />
-                  </label>
-
-                  {docs.length > 0 ? (
-                    <ul className="mt-3 space-y-2">
-                      {docs.map((d) => (
-                        <li key={d.id} className="flex items-center justify-between gap-2 bg-gray-50 rounded-lg px-3 py-2">
-                          <div className="min-w-0">
-                            <p className="text-xs font-medium text-gray-700 truncate">{d.filename}</p>
-                            <p className="text-[10px] text-gray-400">{d.size} · {d.date}</p>
-                          </div>
-                          <button
-                            onClick={() => handleDelete(d.id)}
-                            className="p-1 hover:bg-red-50 rounded-lg shrink-0"
+                  <div className="mt-4 pt-3 border-t border-gray-100">
+                    {docs.length > 0 ? (
+                      <ul className="space-y-2">
+                        {docs.map((d) => (
+                          <li
+                            key={d.id}
+                            className="flex items-center justify-between gap-2 bg-gray-50/80 border border-gray-150 rounded-xl px-3 py-2 text-xs"
                           >
-                            <Trash2 size={13} className="text-red-500" />
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="mt-3 text-xs text-gray-400 text-center">No documents uploaded</p>
-                  )}
+                            <div className="min-w-0">
+                              <p className="font-semibold text-gray-800 truncate">{d.filename}</p>
+                              <p className="text-[10px] text-gray-400">{d.size} · {d.date}</p>
+                            </div>
+                            <button
+                              onClick={() => handleDelete(d.id)}
+                              className="p-1 hover:bg-red-50 text-gray-400 hover:text-red-600 rounded-lg shrink-0 transition-colors"
+                              title="Delete"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-[11px] text-gray-400 font-medium text-center py-1">No artifacts uploaded yet</p>
+                    )}
+                  </div>
                 </div>
               );
             })}

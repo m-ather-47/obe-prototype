@@ -65,24 +65,24 @@ export default function CLOs() {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Course Learning Outcomes</h1>
-          <p className="text-sm text-gray-500">CLOs are owned by their teacher and apply to every section using the course.</p>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">Course Learning Outcomes</h1>
+          <p className="text-xs text-gray-500 font-medium mt-1">CLOs are owned by course instructors and apply across assigned sections.</p>
         </div>
         {!admin && availableCourses.length > 0 && (
           <button
             onClick={openAdd}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 bg-black hover:bg-neutral-800 text-white px-5 py-2.5 rounded-full text-xs font-semibold shadow-xs transition-all cursor-pointer"
           >
-            <Plus size={16} />
-            Add CLO
+            <Plus size={15} />
+            <span>Add CLO</span>
           </button>
         )}
         {admin && (
-          <span className="flex items-center gap-1.5 text-xs text-gray-500">
-            <ShieldCheck size={14} /> Admin approval queue
+          <span className="flex items-center gap-1.5 text-xs text-gray-500 font-semibold bg-white border border-gray-200/90 rounded-full px-4 py-2 shadow-2xs">
+            <ShieldCheck size={14} className="text-emerald-600" /> Admin approval queue
           </span>
         )}
       </div>
@@ -94,53 +94,88 @@ export default function CLOs() {
           const courseSections = sectionList.filter((section) => section.course_id === c.course_id);
 
           return (
-            <div key={c.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center shrink-0">
-                    <GraduationCap size={20} className="text-indigo-600" />
+            <div
+              key={c.id}
+              className="bg-white rounded-3xl border border-gray-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-5 hover:shadow-md transition-all"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 bg-indigo-50 text-indigo-600 border border-indigo-200/60 rounded-2xl flex items-center justify-center font-bold shadow-2xs shrink-0">
+                    <GraduationCap size={18} />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-semibold text-gray-800">{c.number}</h3>
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{c.bloom_level}</span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        c.approval_status === "approved"
-                          ? "bg-green-100 text-green-700"
-                          : c.approval_status === "rejected"
-                            ? "bg-red-100 text-red-700"
-                            : "bg-amber-100 text-amber-700"
-                      }`}>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-xs font-bold text-gray-900">{c.number}</h3>
+                      <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                        {c.bloom_level}
+                      </span>
+                      <span
+                        className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${
+                          c.approval_status === "approved"
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-200/60"
+                            : c.approval_status === "rejected"
+                              ? "bg-red-50 text-red-700 border-red-200/60"
+                              : "bg-amber-50 text-amber-700 border-amber-200/60"
+                        }`}
+                      >
                         {c.approval_status || "pending"}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">{c.title}</p>
-                    <div className="flex gap-3 mt-2 text-xs text-gray-400">
-                      <span>{course?.code} · {courseSections.length} section{courseSections.length === 1 ? "" : "s"} using this course</span>
-                      {plo && <span>Mapped to {plo.number}</span>}
+                    <p className="text-xs font-semibold text-gray-800 mt-1 leading-relaxed">{c.title}</p>
+                    <div className="flex flex-wrap gap-3 mt-2 text-[11px] text-gray-400 font-medium">
+                      <span>{course?.code} · {courseSections.length} section{courseSections.length === 1 ? "" : "s"}</span>
+                      {plo && <span className="text-indigo-600 font-semibold">Mapped to {plo.number}</span>}
                     </div>
                   </div>
                 </div>
+
                 {!admin && (
-                  <div className="flex gap-1">
-                    <button onClick={() => openEdit(c)} className="p-1.5 hover:bg-gray-100 rounded-lg"><Edit size={14} className="text-gray-500" /></button>
-                    <button onClick={() => handleDelete(c.id)} className="p-1.5 hover:bg-red-50 rounded-lg"><Trash2 size={14} className="text-red-500" /></button>
+                  <div className="flex gap-1 shrink-0">
+                    <button
+                      onClick={() => openEdit(c)}
+                      className="p-1.5 hover:bg-gray-100 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+                      title="Edit"
+                    >
+                      <Edit size={14} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(c.id)}
+                      className="p-1.5 hover:bg-red-50 text-gray-400 hover:text-red-600 rounded-lg transition-colors"
+                      title="Delete"
+                    >
+                      <Trash2 size={14} />
+                    </button>
                   </div>
                 )}
                 {admin && c.approval_status !== "approved" && (
-                  <div className="flex gap-1">
-                    <button title="Approve CLO" onClick={() => handleApproval(c.id, "approved")} className="p-1.5 hover:bg-green-50 rounded-lg"><Check size={15} className="text-green-600" /></button>
-                    <button title="Reject CLO" onClick={() => handleApproval(c.id, "rejected")} className="p-1.5 hover:bg-red-50 rounded-lg"><X size={15} className="text-red-600" /></button>
+                  <div className="flex gap-1.5 shrink-0">
+                    <button
+                      title="Approve CLO"
+                      onClick={() => handleApproval(c.id, "approved")}
+                      className="p-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl transition-colors border border-emerald-200/60"
+                    >
+                      <Check size={14} />
+                    </button>
+                    <button
+                      title="Reject CLO"
+                      onClick={() => handleApproval(c.id, "rejected")}
+                      className="p-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors border border-red-200/60"
+                    >
+                      <X size={14} />
+                    </button>
                   </div>
                 )}
               </div>
-              <div className="mt-3 flex items-center gap-4">
-                <div className="bg-gray-50 rounded-lg px-3 py-1.5 text-xs">
-                  <span className="text-gray-400">Passing Threshold: </span>
-                  <span className="font-semibold text-gray-700">{c.passing_threshold}%</span>
+
+              <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] text-gray-400">Passing Threshold:</span>
+                  <span className="font-bold text-gray-800">{c.passing_threshold}%</span>
                 </div>
                 {c.approval_status === "pending" && (
-                  <div className="flex items-center gap-1 text-xs text-amber-600"><Clock3 size={13} /> Awaiting admin approval</div>
+                  <div className="flex items-center gap-1.5 text-[11px] text-amber-600 font-medium">
+                    <Clock3 size={13} /> Awaiting admin review
+                  </div>
                 )}
               </div>
             </div>
@@ -153,11 +188,19 @@ export default function CLOs() {
         onClose={() => setModal(null)}
         title={modal?.mode === "add" ? "Add CLO" : "Edit CLO"}
       >
-        <div className="space-y-3">
-          <FormField label="Number (e.g. CLO-4)" value={form.number} onChange={(e) => setForm({ ...form, number: e.target.value })} />
-          <FormField label="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+        <div className="space-y-4">
+          <FormField
+            label="CLO Identifier (e.g. CLO-4)"
+            value={form.number}
+            onChange={(e) => setForm({ ...form, number: e.target.value })}
+          />
+          <FormField
+            label="CLO Statement / Title"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+          />
           <SelectField
-            label="Course (CLO applies to all sections)"
+            label="Target Course"
             value={form.course_id}
             onChange={(e) => setForm({ ...form, course_id: Number(e.target.value) })}
           >
@@ -175,7 +218,7 @@ export default function CLOs() {
             ))}
           </SelectField>
           <SelectField
-            label="Bloom Level"
+            label="Bloom's Taxonomy Level"
             value={form.bloom_level}
             onChange={(e) => setForm({ ...form, bloom_level: e.target.value })}
           >
@@ -189,11 +232,17 @@ export default function CLOs() {
             value={form.passing_threshold}
             onChange={(e) => setForm({ ...form, passing_threshold: Number(e.target.value) })}
           />
-          <div className="flex gap-2 pt-2">
-            <button onClick={handleSave} className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+          <div className="flex gap-2.5 pt-3">
+            <button
+              onClick={handleSave}
+              className="flex-1 bg-black hover:bg-neutral-800 text-white py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer"
+            >
               Submit for Approval
             </button>
-            <button onClick={() => setModal(null)} className="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+            <button
+              onClick={() => setModal(null)}
+              className="flex-1 border border-gray-200 hover:bg-gray-50 text-gray-700 py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer"
+            >
               Cancel
             </button>
           </div>
